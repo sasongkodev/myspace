@@ -45,7 +45,7 @@ const ProfileCard = () => {
       {/* Avatar (Moved Up) */}
       <div className="flex justify-center -mt-16">
         <Image
-          src="/avatar.jpg"
+          src="https://dl.dropboxusercontent.com/scl/fi/rx8tc3apj8a8arnny9jjz/Avatar.jpg?rlkey=6ipfvb6d3f60b4mkab6ulgbm5&st=m0qk6d3l&raw=1"
           alt="Avatar"
           width={100}
           height={100}
