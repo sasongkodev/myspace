@@ -1,21 +1,59 @@
 "use client";
 
-import Image from "next/image";
-import {
-  FaMapMarkerAlt,
-  FaInstagram,
-  FaLinkedin,
-  FaGithub,
-  FaGlobe,
-  FaMoon,
-  FaSun,
-} from "react-icons/fa";
 import { useState, useEffect } from "react";
+import {
+  MapPin,
+  Instagram,
+  Linkedin,
+  Github,
+  Globe,
+  Moon,
+  Sun,
+} from "lucide-react";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import PortfolioList from "@/components/PortfolioList";
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 
 const ProfileCard = () => {
   const roles = ["Web Developer", "Graphic Designer"];
   const [currentRole, setCurrentRole] = useState(roles[0]);
   const [darkMode, setDarkMode] = useState(false);
+
+  // Mouse position state for parallax
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+
+  // Smooth spring animation for mouse movement
+  const mouseX = useSpring(x, { stiffness: 50, damping: 20 });
+  const mouseY = useSpring(y, { stiffness: 50, damping: 20 });
+
+  function handleMouseMove({ currentTarget, clientX, clientY }) {
+    const { left, top, width, height } = currentTarget.getBoundingClientRect();
+    // Calculate normalized position (-0.5 to 0.5)
+    // Avoid division by zero
+    if (width === 0 || height === 0) return;
+
+    const xPos = (clientX - left) / width - 0.5;
+    const yPos = (clientY - top) / height - 0.5;
+
+    x.set(xPos);
+    y.set(yPos);
+  }
+
+  // Transform background opposite to mouse movement (Parallax)
+  const bgX = useTransform(mouseX, [-0.5, 0.5], ["10px", "-10px"]);
+  const bgY = useTransform(mouseY, [-0.5, 0.5], ["10px", "-10px"]);
+
+  useEffect(() => {
+    // Check if user has a preference
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      setDarkMode(true);
+    }
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -28,85 +66,124 @@ const ProfileCard = () => {
 
   return (
     <div
-      className={`p-6 rounded-lg shadow-lg max-w-md w-full transition-all duration-300 ${
-        darkMode ? "bg-gray-900 text-white" : "bg-gray-800 text-gray-300"
-      }`}
+      className={`min-h-screen flex items-center justify-center p-4 relative overflow-hidden ${darkMode ? "dark" : ""}`}
+      onMouseMove={handleMouseMove}
     >
-      {/* Dark Mode Toggle */}
-      <div className="flex justify-end mb-2">
-        <button
-          onClick={() => setDarkMode(!darkMode)}
-          className="p-2 rounded-full bg-gray-700 hover:bg-gray-600"
-        >
-          {darkMode ? <FaSun className="text-yellow-400" /> : <FaMoon />}
-        </button>
-      </div>
+      {/* Background Image with Parallax */}
+      <motion.div
+        className="absolute inset-0 z-0 opacity-20 pointer-events-none"
+        style={{
+          backgroundImage: `url('/assets/biner.svg')`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          x: bgX,
+          y: bgY,
+          scale: 1.1 // Scale up to prevent edges from showing during movement
+        }}
+      />
 
-      {/* Avatar (Moved Up) */}
-      <div className="flex justify-center -mt-16">
-        <Image
-          src="https://dl.dropboxusercontent.com/scl/fi/rx8tc3apj8a8arnny9jjz/Avatar.jpg?rlkey=6ipfvb6d3f60b4mkab6ulgbm5&st=m0qk6d3l&raw=1"
-          alt="Avatar"
-          width={100}
-          height={100}
-          className="rounded-full border-4 border-gray-700"
-        />
-      </div>
+      <motion.div
+        initial={{ opacity: 0, scale: 0.5, rotateY: 180 }}
+        animate={{ opacity: 1, scale: 1, rotateY: 0 }}
+        transition={{
+          type: "spring",
+          stiffness: 260,
+          damping: 20,
+          duration: 1.5
+        }}
+        className="z-10 w-full max-w-md"
+        style={{ perspective: 1000 }}
+      >
+        <motion.div
+          whileHover={{ rotateX: 5, rotateY: 5, scale: 1.02 }}
+          transition={{ type: "spring", stiffness: 300 }}
+          style={{ transformStyle: "preserve-3d" }}
+        >
+          <Card className="w-full transition-all duration-300 shadow-2xl border-muted-foreground/10 bg-card/90 backdrop-blur-sm text-card-foreground">
 
-      {/* Profile Info */}
-      <div className="text-center mt-4">
-        <h1 className="text-3xl font-bold">Wahyu Puji Sasongko</h1>
-        <p className="text-gray-400 transition-opacity duration-500">
-          {currentRole}
-        </p>
-      </div>
+            <CardHeader className="flex flex-row justify-end p-4 pb-0">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setDarkMode(!darkMode)}
+                className="rounded-full hover:bg-muted"
+              >
+                {darkMode ? <Sun className="h-5 w-5 text-yellow-400" /> : <Moon className="h-5 w-5" />}
+              </Button>
+            </CardHeader>
 
-      {/* Location & Status */}
-      <div className="flex items-center justify-center space-x-2 mt-3">
-        <FaMapMarkerAlt />
-        <span>Yogyakarta, ID</span>
-      </div>
-      <div className="flex justify-center mt-2">
-        <span className="bg-green-800 text-green-300 text-xs font-semibold px-2 py-1 rounded-full">
-          AVAILABLE FOR WORK
-        </span>
-      </div>
+            <CardContent className="flex flex-col items-center p-6 pt-0">
+              <motion.div
+                whileHover={{ scale: 1.1 }}
+                transition={{ duration: 0.2 }}
+                className="relative cursor-pointer"
+              >
+                <Avatar className="h-32 w-32 border-4 border-primary/20 shadow-xl -mt-12 mb-4 ring-4 ring-background">
+                  <AvatarImage
+                    src="/assets/Avatar.jpg"
+                    alt="Wahyu Puji Sasongko"
+                    className="object-cover"
+                  />
+                  <AvatarFallback className="text-2xl font-bold">WP</AvatarFallback>
+                </Avatar>
+                <span className="absolute bottom-4 right-2 w-5 h-5 bg-green-500 border-4 border-card rounded-full animate-pulse"></span>
+              </motion.div>
 
-      {/* Social Links */}
-      <div className="flex justify-center space-x-4 text-xl mt-4">
-        <a
-          href="https://www.instagram.com/wps_1717/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="hover:text-white"
-        >
-          <FaInstagram />
-        </a>
-        <a
-          href="https://www.linkedin.com/in/wahyu-puji-sasongko-435a24207/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="hover:text-white"
-        >
-          <FaLinkedin />
-        </a>
-        <a
-          href="https://github.com/sasongkodev"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="hover:text-white"
-        >
-          <FaGithub />
-        </a>
-        <a
-          href="https://ngobrolit.com/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="hover:text-white"
-        >
-          <FaGlobe />
-        </a>
-      </div>
+              <div className="text-center space-y-1">
+                <h1 className="text-3xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/60">
+                  Wahyu Puji Sasongko
+                </h1>
+                <p className="text-muted-foreground font-medium h-6">
+                  {currentRole}
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2 mt-4 text-sm text-muted-foreground bg-muted/50 px-3 py-1 rounded-full">
+                <MapPin className="h-4 w-4" />
+                <span>Yogyakarta, ID</span>
+              </div>
+
+              <motion.div
+                className="mt-4"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <Badge variant="outline" className="px-4 py-1 border-primary/50 text-primary bg-primary/5 hover:bg-primary/10 transition-colors">
+                  AVAILABLE FOR WORK
+                </Badge>
+              </motion.div>
+
+              <Separator className="my-6 opacity-50" />
+
+              {/* Social Links */}
+              <div className="flex justify-center gap-4">
+                {[
+                  { icon: Instagram, href: "https://www.instagram.com/wps_1717/" },
+                  { icon: Linkedin, href: "https://www.linkedin.com/in/wahyu-puji-sasongko-435a24207/" },
+                  { icon: Github, href: "https://github.com/sasongkodev" },
+                  { icon: Globe, href: "https://ngobrolit.com/" },
+                ].map((social, index) => (
+                  <motion.div
+                    key={index}
+                    whileHover={{ y: -3, scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                  >
+                    <Button variant="ghost" size="icon" asChild className="hover:text-primary hover:bg-primary/10 transition-colors">
+                      <a href={social.href} target="_blank" rel="noopener noreferrer">
+                        <social.icon className="h-5 w-5" />
+                      </a>
+                    </Button>
+                  </motion.div>
+                ))}
+              </div>
+
+
+
+            </CardContent>
+          </Card>
+        </motion.div>
+      </motion.div>
     </div>
   );
 };

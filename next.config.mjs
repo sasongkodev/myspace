@@ -1,7 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ["dl.dropboxusercontent.com"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "dl.dropboxusercontent.com",
+      },
+    ],
   },
 };
 
