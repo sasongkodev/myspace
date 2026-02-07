@@ -74,12 +74,12 @@ const ProfileCard = () => {
         className="absolute inset-0 z-0 opacity-20 pointer-events-none"
         style={{
           backgroundImage: `url('/assets/biner.svg')`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
           x: bgX,
           y: bgY,
-          scale: 1.1 // Scale up to prevent edges from showing during movement
+          scale: 1.1, // Scale up to prevent edges from showing during movement
         }}
       />
 
@@ -90,7 +90,7 @@ const ProfileCard = () => {
           type: "spring",
           stiffness: 260,
           damping: 20,
-          duration: 1.5
+          duration: 1.5,
         }}
         className="z-10 w-full max-w-md"
         style={{ perspective: 1000 }}
@@ -101,7 +101,6 @@ const ProfileCard = () => {
           style={{ transformStyle: "preserve-3d" }}
         >
           <Card className="w-full transition-all duration-300 shadow-2xl border-muted-foreground/10 bg-card/90 backdrop-blur-sm text-card-foreground">
-
             <CardHeader className="flex flex-row justify-end p-4 pb-0">
               <Button
                 variant="ghost"
@@ -109,7 +108,11 @@ const ProfileCard = () => {
                 onClick={() => setDarkMode(!darkMode)}
                 className="rounded-full hover:bg-muted"
               >
-                {darkMode ? <Sun className="h-5 w-5 text-yellow-400" /> : <Moon className="h-5 w-5" />}
+                {darkMode ? (
+                  <Sun className="h-5 w-5 text-yellow-400" />
+                ) : (
+                  <Moon className="h-5 w-5" />
+                )}
               </Button>
             </CardHeader>
 
@@ -125,7 +128,9 @@ const ProfileCard = () => {
                     alt="Wahyu Puji Sasongko"
                     className="object-cover"
                   />
-                  <AvatarFallback className="text-2xl font-bold">WP</AvatarFallback>
+                  <AvatarFallback className="text-2xl font-bold">
+                    WP
+                  </AvatarFallback>
                 </Avatar>
                 <span className="absolute bottom-4 right-2 w-5 h-5 bg-green-500 border-4 border-card rounded-full animate-pulse"></span>
               </motion.div>
@@ -149,7 +154,10 @@ const ProfileCard = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <Badge variant="outline" className="px-4 py-1 border-primary/50 text-primary bg-primary/5 hover:bg-primary/10 transition-colors">
+                <Badge
+                  variant="outline"
+                  className="px-4 py-1 border-primary/50 text-primary bg-primary/5 hover:bg-primary/10 transition-colors"
+                >
                   AVAILABLE FOR WORK
                 </Badge>
               </motion.div>
@@ -159,27 +167,39 @@ const ProfileCard = () => {
               {/* Social Links */}
               <div className="flex justify-center gap-4">
                 {[
-                  { icon: Instagram, href: "https://www.instagram.com/wps_1717/" },
-                  { icon: Linkedin, href: "https://www.linkedin.com/in/wahyu-puji-sasongko-435a24207/" },
+                  {
+                    icon: Instagram,
+                    href: "https://www.instagram.com/wps_1717/",
+                  },
+                  {
+                    icon: Linkedin,
+                    href: "https://www.linkedin.com/in/wahyu-puji-sasongko-435a24207/",
+                  },
                   { icon: Github, href: "https://github.com/sasongkodev" },
-                  { icon: Globe, href: "https://ngobrolit.com/" },
+                  { icon: Globe, href: "https://portofolio.wahyupuji.com" },
                 ].map((social, index) => (
                   <motion.div
                     key={index}
                     whileHover={{ y: -3, scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
                   >
-                    <Button variant="ghost" size="icon" asChild className="hover:text-primary hover:bg-primary/10 transition-colors">
-                      <a href={social.href} target="_blank" rel="noopener noreferrer">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      asChild
+                      className="hover:text-primary hover:bg-primary/10 transition-colors"
+                    >
+                      <a
+                        href={social.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
                         <social.icon className="h-5 w-5" />
                       </a>
                     </Button>
                   </motion.div>
                 ))}
               </div>
-
-
-
             </CardContent>
           </Card>
         </motion.div>
