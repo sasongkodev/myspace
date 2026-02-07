@@ -46,7 +46,7 @@ export default function Lanyard({
 
     // Adjust FOV or Position based on screen size
     const adjustedFov = isMobile ? 35 : isTablet ? 30 : fov;
-    const adjustedPosition = isMobile ? [0, 0, 35] : isTablet ? [0, 0, 32] : position;
+    const adjustedPosition = isMobile ? [0, 0, 22] : isTablet ? [0, 0, 30] : position;
 
     return (
         <div className="lanyard-wrapper" style={{ height: '100vh', width: '100vw', pointerEvents: 'none' }}>
