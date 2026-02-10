@@ -8,6 +8,7 @@ import {
   Linkedin,
   Github,
   Globe,
+  BookOpen,
   Moon,
   Sun,
 } from "lucide-react";
@@ -141,6 +142,7 @@ const ProfileCard = () => {
                     },
                     { icon: Github, href: "https://github.com/sasongkodev" },
                     { icon: Globe, href: "https://portofolio.wahyupuji.com" },
+                    { icon: BookOpen, href: "https://temankode.wahyupuji.com/" },
                   ].map((social, index) => (
                     <motion.div
                       key={index}
